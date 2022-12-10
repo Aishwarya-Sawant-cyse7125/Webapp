@@ -1,0 +1,15 @@
+flyway migrate -url="jdbc:postgresql://:5432/postgres" -defaultSchema=todo -user="postgres" -password="Pass@123" -locations="/migrate"
+
+https://dba.stackexchange.com/questions/1285/how-do-i-list-all-databases-and-tables-using-psql
+
+https://stackoverflow.com/questions/34098326/how-to-select-a-schema-in-postgres-when-using-psql
+
+https://stackoverflow.com/questions/15644152/list-tables-in-a-postgresql-schema
+
+https://tableplus.com/blog/2018/10/how-to-start-stop-restart-postgresql-server.html
+
+DROP SCHEMA todo CASCADE;
+
+sudo pg_dump -h 127.0.0.1 -U postgres -d postgres -N topology -T spatial_ref_sys > dbexport.sql
+
+sudo -u postgres psql

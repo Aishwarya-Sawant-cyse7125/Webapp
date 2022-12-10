@@ -1,0 +1,7 @@
+
+#Get image "flyway" from Flyway's repository
+FROM flyway/flyway:7.15.0
+#Copy the migration script fom local to container
+COPY *.sql /flyway/sql/
+
+# FROM flyway/flyway:7.15.0-alpine as flyway

@@ -1,0 +1,7 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: assignment4-grp2
+  labels:
+    name: assignment4-grp2

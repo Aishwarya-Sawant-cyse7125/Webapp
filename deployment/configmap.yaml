@@ -1,0 +1,11 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: appconfig
+  namespace: assignment4-grp2
+data:
+  # Configuration values can be set as key-value properties
+  DB_FLY_ADDRESS: $RDS_INSTANCE
+  DB_ADDRESS: $DB_INSTANCE
+  DB_NAME: csye7125

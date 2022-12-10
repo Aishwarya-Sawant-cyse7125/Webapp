@@ -1,0 +1,79 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: appdeployment
+  namespace: assignment4-grp2
+  labels:
+    app: webapp
+spec:
+  replicas: 3
+  progressDeadlineSeconds: 200
+  minReadySeconds: 30
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  selector:
+    matchLabels:
+      app: webapp
+  template:
+    metadata:
+      labels:
+        app: webapp
+    spec:
+      containers:
+        - name: webapp
+          image: csye7125project/webapp:v1
+          imagePullPolicy: Always
+          env:
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: secretapp
+                  key: DB_PASSWORD
+            - name: DB_USER_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: secretapp
+                  key: DB_USER_NAME
+          envFrom:
+            - configMapRef:
+                name: appconfig
+          ports:
+            - containerPort: 3200
+          readinessProbe:
+            httpGet:
+              path: /dbtest
+              port: 3200
+            initialDelaySeconds: 60
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: 3200
+            initialDelaySeconds: 60
+            periodSeconds: 10
+      initContainers:
+        - name: db-flyway
+          image: csye7125project/flywaytest
+          env:
+            - name: FLYWAY_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: appconfig
+                  key: DB_FLY_ADDRESS
+            - name: FLYWAY_USER
+              valueFrom:
+                secretKeyRef:
+                  name: secretapp
+                  key: DB_USER_NAME
+            - name: FLYWAY_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: secretapp
+                  key: DB_PASSWORD
+          args: ["migrate"]
+      imagePullSecrets:
+        - name: regcred
